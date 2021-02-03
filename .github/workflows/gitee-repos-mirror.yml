@@ -4,36 +4,36 @@ on:
   push:
     # branches:
       # - master
-  # ÊÖ¶¯ÊÂ¼ş
+  # æ‰‹åŠ¨äº‹ä»¶
   workflow_dispatch:
-  # ¼Æ»®ÊÂ¼ş
+  # è®¡åˆ’äº‹ä»¶
   schedule:
-    # Ã¿Ìì±±¾©Ê±¼ä 9µã ÔËĞĞ
+    # æ¯å¤©åŒ—äº¬æ—¶é—´ 9ç‚¹ è¿è¡Œ
     - cron:  '0 1 * * *'
 
-# ÈÎÎñ
+# ä»»åŠ¡
 jobs:
   build:
-    # ·şÎñÆ÷»·¾³£º×îĞÂ°æ Ubuntu
+    # æœåŠ¡å™¨ç¯å¢ƒï¼šæœ€æ–°ç‰ˆ Ubuntu
     runs-on: ubuntu-latest
     steps: 
-    - name: Checkout source codes.
-      uses£ºactions/checkout@v1
+    - name: Checkout source code
+      uses: actions/checkout@v1
     - name: Mirror the Github organization repos to Gitee.
       uses: shimmerjordan/hub-mirror@master
-        with: 
-          # ±ØÑ¡£¬ĞèÒªÍ¬²½µÄ Github ÓÃ»§£¨Ô´£©
+      with: 
+          # å¿…é€‰ï¼Œéœ€è¦åŒæ­¥çš„ Github ç”¨æˆ·ï¼ˆæºï¼‰
           src: github/shimmerjordan
-          # ±ØÑ¡£¬ĞèÒªÍ¬²½µ½µÄ Gitee ÓÃ»§£¨Ä¿µÄ£©
+          # å¿…é€‰ï¼Œéœ€è¦åŒæ­¥åˆ°çš„ Gitee ç”¨æˆ·ï¼ˆç›®çš„ï¼‰
           dst: gitee/shimmerjordan
-          # ±ØÑ¡£¬Gitee¹«Ô¿¶ÔÓ¦µÄË½Ô¿£¬https://gitee.com/profile/sshkeys
-          # id_rsa.pub: ¹«Ô¿£¬id_rsa: Ë½Ô¿
+          # å¿…é€‰ï¼ŒGiteeå…¬é’¥å¯¹åº”çš„ç§é’¥ï¼Œhttps://gitee.com/profile/sshkeys
+          # id_rsa.pub: å…¬é’¥ï¼Œid_rsa: ç§é’¥
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
-          # ±ØÑ¡£¬Gitee¶ÔÓ¦µÄÓÃÓÚ´´½¨²Ö¿âµÄtoken£¬https://gitee.com/profile/personal_access_tokens
+          # å¿…é€‰ï¼ŒGiteeå¯¹åº”çš„ç”¨äºåˆ›å»ºä»“åº“çš„tokenï¼Œhttps://gitee.com/profile/personal_access_tokens
           dst_token:  ${{ secrets.GITEE_TOKEN }}
-          # Èç¹ûÊÇ×éÖ¯£¬Ö¸¶¨×éÖ¯¼´¿É£¬Ä¬ÈÏÎªÓÃ»§user
+          # å¦‚æœæ˜¯ç»„ç»‡ï¼ŒæŒ‡å®šç»„ç»‡å³å¯ï¼Œé»˜è®¤ä¸ºç”¨æˆ·user
           # account_type: org
-          # »¹ÓĞºÚ¡¢°×Ãûµ¥£¬¾²Ì¬Ãûµ¥»úÖÆ£¬¿ÉÒÔÓÃÓÚ¸üĞÂÄ³Ğ©Ö¸¶¨¿â
+          # è¿˜æœ‰é»‘ã€ç™½åå•ï¼Œé™æ€åå•æœºåˆ¶ï¼Œå¯ä»¥ç”¨äºæ›´æ–°æŸäº›æŒ‡å®šåº“
           # static_list: "vue-admin-antd"
           # black_list: "repo_name,repo_name2"
           # white_list: "repo_name,repo_name2"
