@@ -54,7 +54,7 @@ jobs:
 #### Required
 - `src` source account, such as `github/kunpengcompute`, is the Github kunpengcompute account.
 - `dst` Destination account, such as `/kunpengcompute`, is the Gitee kunpengcompute account.
-- `dst_key` the private key to push code in destination account (default in ~/.ssh/id_rsa), you can see [generating SSH keys](https://docs.github.com/articles/generating-an-ssh-key/) to generate the pri/pub key, and make sure the pub key has been added in destination. You can set Github ssh key in [here](https://github.com/settings/keys)，set the Gitee ssh key in [here](https://gitee.com/profile/sshkeys).
+- `dst_key` the private key to push code in destination account (default in ~/.ssh/id_rsa), you can see [generating SSH keys](https://docs.github.com/articles/generating-an-ssh-key/) to generate the pri/pub key, and make sure the pub key has been added in destination. You can set Github ssh key in [here](https://github.com/settings/keys)，set the Gitee ssh key in [here](https://gitee.com/profile/sshkeys). (Configure the private key `id_rsa` in github's secret and the public key `id_rsa.pub` in gitee's SSH)
 - `dst_token` the API token to create non-existent repo, You can get Github token in [here](https://github.com/settings/tokens), and the Gitee in [here](https://gitee.com/profile/personal_access_tokens).
 
 #### Optional
