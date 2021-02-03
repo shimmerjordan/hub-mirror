@@ -70,3 +70,4 @@ jobs:
 - [Hub mirror template](https://github.com/yi-Xu-0100/hub-mirror): A template repo to show how to use this action. from @yi-Xu-0100
 - [Auto-Sync GitHub Repositories to Gitee](https://github.com/ShixiangWang/sync2gitee): An introduction about how to use this action. from @ShixiangWang
 - [Use Github Action to sync reois to Gitee](http://shimmerjordan.github.io/2020/01/17/%E5%B7%A7%E7%94%A8Github-Action%E5%90%8C%E6%AD%A5%E4%BB%A3%E7%A0%81%E5%88%B0Gitee/): The blog for this action.
+- [https://github.com/Yikun/hub-mirror-action](https://github.com/Yikun/hub-mirror-action)
