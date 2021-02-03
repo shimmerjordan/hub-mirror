@@ -17,6 +17,8 @@ jobs:
     # 服务器环境：最新版 Ubuntu
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout source codes
+      uses: actions/checkout@v1
       - name: Mirror the Github organization repos to Gitee.
         uses: shimmerjordan/hub-mirror@master
         with:
