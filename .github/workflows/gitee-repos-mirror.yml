@@ -4,36 +4,36 @@ on:
   push:
     # branches:
       # - master
-  # æ‰‹åŠ¨äº‹ä»¶
+  # ÊÖ¶¯ÊÂ¼ş
   workflow_dispatch:
-  # è®¡åˆ’äº‹ä»¶
+  # ¼Æ»®ÊÂ¼ş
   schedule:
-    # æ¯å¤©åŒ—äº¬æ—¶é—´ 9ç‚¹ è¿è¡Œ
+    # Ã¿Ìì±±¾©Ê±¼ä 9µã ÔËĞĞ
     - cron:  '0 1 * * *'
 
-# ä»»åŠ¡
+# ÈÎÎñ
 jobs:
   build:
-    # æœåŠ¡å™¨ç¯å¢ƒï¼šæœ€æ–°ç‰ˆ Ubuntu
+    # ·şÎñÆ÷»·¾³£º×îĞÂ°æ Ubuntu
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source codes
-      uses: actions/checkout@v1
-      - name: Mirror the Github organization repos to Gitee.
-        uses: shimmerjordan/hub-mirror@master
-        with:
-          # å¿…é€‰ï¼Œéœ€è¦åŒæ­¥çš„ Github ç”¨æˆ·ï¼ˆæºï¼‰
+    - name: Checkout source codes.
+      uses£ºactions/checkout@v1
+    - name: Mirror the Github organization repos to Gitee.
+      uses: shimmerjordan/hub-mirror@master
+        with: 
+          # ±ØÑ¡£¬ĞèÒªÍ¬²½µÄ Github ÓÃ»§£¨Ô´£©
           src: github/shimmerjordan
-          # å¿…é€‰ï¼Œéœ€è¦åŒæ­¥åˆ°çš„ Gitee ç”¨æˆ·ï¼ˆç›®çš„ï¼‰
+          # ±ØÑ¡£¬ĞèÒªÍ¬²½µ½µÄ Gitee ÓÃ»§£¨Ä¿µÄ£©
           dst: gitee/shimmerjordan
-          # å¿…é€‰ï¼ŒGiteeå…¬é’¥å¯¹åº”çš„ç§é’¥ï¼Œhttps://gitee.com/profile/sshkeys
-          # id_rsa.pub: å…¬é’¥ï¼Œid_rsa: ç§é’¥
+          # ±ØÑ¡£¬Gitee¹«Ô¿¶ÔÓ¦µÄË½Ô¿£¬https://gitee.com/profile/sshkeys
+          # id_rsa.pub: ¹«Ô¿£¬id_rsa: Ë½Ô¿
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
-          # å¿…é€‰ï¼ŒGiteeå¯¹åº”çš„ç”¨äºåˆ›å»ºä»“åº“çš„tokenï¼Œhttps://gitee.com/profile/personal_access_tokens
+          # ±ØÑ¡£¬Gitee¶ÔÓ¦µÄÓÃÓÚ´´½¨²Ö¿âµÄtoken£¬https://gitee.com/profile/personal_access_tokens
           dst_token:  ${{ secrets.GITEE_TOKEN }}
-          # å¦‚æœæ˜¯ç»„ç»‡ï¼ŒæŒ‡å®šç»„ç»‡å³å¯ï¼Œé»˜è®¤ä¸ºç”¨æˆ·user
+          # Èç¹ûÊÇ×éÖ¯£¬Ö¸¶¨×éÖ¯¼´¿É£¬Ä¬ÈÏÎªÓÃ»§user
           # account_type: org
-          # è¿˜æœ‰é»‘ã€ç™½åå•ï¼Œé™æ€åå•æœºåˆ¶ï¼Œå¯ä»¥ç”¨äºæ›´æ–°æŸäº›æŒ‡å®šåº“
+          # »¹ÓĞºÚ¡¢°×Ãûµ¥£¬¾²Ì¬Ãûµ¥»úÖÆ£¬¿ÉÒÔÓÃÓÚ¸üĞÂÄ³Ğ©Ö¸¶¨¿â
           # static_list: "vue-admin-antd"
           # black_list: "repo_name,repo_name2"
           # white_list: "repo_name,repo_name2"
