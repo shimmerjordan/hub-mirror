@@ -1,6 +1,6 @@
 name: "Hub Mirror Action."
 description: "Mirror the organization repos between hub (github/gitee)."
-author: "yikun"
+author: "shimmerjordan"
 branding:
   icon: "upload-cloud"
   color: "gray-dark"
@@ -12,10 +12,10 @@ inputs:
     description: "The app token which is used to  create repo in destination hub."
     required: true
   dst:
-    description: "Destination name. Such as `gitee/kunpengcompute`."
+    description: "Destination name. Such as `gitee/shimmerjordan`."
     required: true
   src:
-    description: "Source name. Such as `github/kunpengcompute`."
+    description: "Source name. Such as `github/shimmerjordan`."
     required: true
   account_type:
     description: "The account type. Such as org, user."
@@ -43,7 +43,7 @@ inputs:
     default: false
   timeout:
     description: "Set the timeout for every git command, like '600'=>600s, '30m'=>30 mins, '1h'=>1 hours"
-    default: '30m'
+    default: '1h'
 runs:
   using: "docker"
   image: "Dockerfile"
