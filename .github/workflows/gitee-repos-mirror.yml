@@ -18,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v1
+      # 不知道为什么，即使添加了cmod权限，运行总是有问题，这里用原作者的库好了
+      # uses: actions/checkout@v1
+      uses: Yikun/hub-mirror-action@master
 
     - name: Get Time
       id: get-time
