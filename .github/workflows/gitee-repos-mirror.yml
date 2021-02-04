@@ -35,7 +35,7 @@ jobs:
         restore-keys: ${{ runner.os }}-hub-repos-cache
 
     - name: Mirror Github to Gitee with white list and cache
-      uses: shimmerjordan/hub-mirror@master
+      uses: ./.
       with:
         src: github/shimmerjordan
         dst: gitee/shimmerjordan
