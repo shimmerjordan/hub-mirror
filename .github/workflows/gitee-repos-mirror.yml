@@ -17,11 +17,9 @@ jobs:
     # 服务器环境：最新版 Ubuntu
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code
-      # 不知道为什么，即使添加了cmod权限，运行总是有问题，这里用原作者的库好了
-      # uses: actions/checkout@v1
-      uses: Yikun/hub-mirror-action@master
-
+    - name: Checkout source code    
+      uses: actions/checkout@v1
+      
     - name: Get Time
       id: get-time
       run: |
@@ -37,7 +35,9 @@ jobs:
         restore-keys: ${{ runner.os }}-hub-repos-cache
 
     - name: Mirror Github to Gitee with white list and cache
-      uses: shimmerjordan/hub-mirror@master
+      # 不知道为什么，即使添加了cmod权限，运行总是有问题，这里用原作者的库好了
+      # uses: shimmerjordan/hub-mirror@master
+      uses: Yikun/hub-mirror-action@master
       with:
         src: github/shimmerjordan
         dst: gitee/shimmerjordan
