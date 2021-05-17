@@ -6,6 +6,9 @@ on:
       # - master
   # 手动事件
   workflow_dispatch:
+  
+  watch:
+   types: [started]
   # 计划事件
   schedule:
     # 每天北京时间 9点 运行
