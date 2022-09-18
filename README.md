@@ -2,7 +2,7 @@
 
 简体中文 | [English](./README_en.md)
 
-一个用于在hub间（例如Github，Gitee）账户代码仓库同步的Action
+一个用于在hub间（例如Github，Gitee）账户代码仓库同步的Action 
 
 ## 用法
 
