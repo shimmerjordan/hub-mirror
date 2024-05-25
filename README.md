@@ -49,7 +49,6 @@ jobs:
           # clone_style: "ssh"
 ```
 
-
 ## 参数详解
 #### 必选参数
 - `src` 需要被同步的源端账户名，如github/shimmerjordan，表示Github的shimmerjordan账户。
