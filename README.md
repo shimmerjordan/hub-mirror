@@ -50,13 +50,13 @@ jobs:
 ```
 
 ## 参数详解
-#### 必选参数
+### 必选参数
 - `src` 需要被同步的源端账户名，如github/shimmerjordan，表示Github的shimmerjordan账户。
 - `dst` 需要同步到的目的端账户名，如gitee/shimmerjordan，表示Gitee的shimmerjordan账户。
 - `dst_key` 用于在目的端上传代码的私钥(默认可以从~/.ssh/id_rsa获取），可参考[生成/添加SSH公钥](https://gitee.com/help/articles/4181)或[generating SSH keys](https://docs.github.com/articles/generating-an-ssh-key/)生成，并确认对应公钥已经被正确配置在目的端。对应公钥，Github可以在[这里](https://github.com/settings/keys)配置，Gitee可以[这里](https://gitee.com/profile/sshkeys)配置。（github的secret配置私钥`id_rsa`，gitee的SSH配置公钥`id_rsa.pub`）
 - `dst_token` 创建仓库的API tokens， 用于自动创建不存在的仓库，Github可以在[这里](https://github.com/settings/tokens)找到，Gitee可以在[这里](https://gitee.com/profile/personal_access_tokens)找到。
 
-#### 可选参数
+### 可选参数
 - `account_type` 默认为user，源和目的的账户类型，可以设置为org（组织）或者user（用户），目前仅支持**同类型账户**（即组织到组织，或用户到用户）的同步。
 - `clone_style` 默认为https，可以设置为ssh或者https。
 - `cache_path` 默认为'', 将代码缓存在指定目录，用于与actions/cache配合以加速镜像过程。
