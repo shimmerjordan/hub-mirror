@@ -17,6 +17,9 @@ inputs:
   src:
     description: "Source name. Such as `github/shimmerjordan`."
     required: true
+  src_token:
+    description: "Optional API token for the source hub, used only to list repos. Avoids the unauthenticated GitHub API rate limit (60/h) on frequent runs. Pass `${{ secrets.GITHUB_TOKEN }}` for GitHub sources."
+    default: ''
   account_type:
     description: "The account type. Such as org, user."
     default: 'user'
@@ -51,6 +54,7 @@ runs:
     - ${{ inputs.dst_key }}
     - ${{ inputs.dst_token }}
     - ${{ inputs.src }}
+    - ${{ inputs.src_token }}
     - ${{ inputs.dst }}
     - ${{ inputs.account_type }}
     - ${{ inputs.clone_style }}

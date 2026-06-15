@@ -1,55 +1,49 @@
-name: Gitee repos mirror periodic job
+name: Gitee repos mirror
 
+# 单向同步：GitHub -> Gitee
 on:
+  # 每次向本仓库 push 时触发
   push:
-    # branches:
-      # - master
-  # 手动事件
+  # 手动触发
   workflow_dispatch:
-  
-  watch:
-   types: [started]
-  # 计划事件
+  # 定时触发：每天北京时间 09:00（UTC 01:00）
   schedule:
-    # 每天北京时间 9点 运行
-    - cron:  '0 1 * * *'
+    - cron: '0 1 * * *'
 
-# 任务
 jobs:
-  build:
-    # 服务器环境：最新版 Ubuntu
+  mirror:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code    
-      uses: actions/checkout@v1
-      
-    - name: Get Time
-      id: get-time
-      run: |
-        echo "::set-output name=date::$(/bin/date -u "+%Y%m%d%H%M%S")"
-      shell: bash
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-    - name: Cache src repos
-      uses: actions/cache@v1
-      id: cache
-      with:
-        path: ${{ github.workspace }}/hub-mirror-cache
-        key: ${{ runner.os }}-hub-repos-cache-${{ steps.get-time.outputs.date }}
-        restore-keys: ${{ runner.os }}-hub-repos-cache
+      - name: Get time
+        id: get-time
+        shell: bash
+        run: echo "date=$(/bin/date -u '+%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
 
-    - name: Mirror Github to Gitee with white list and cache
-      # 不知道为什么，即使添加了cmod权限，运行总是有问题，这里用原作者的库好了
-      # uses: shimmerjordan/hub-mirror@master
-      uses: Yikun/hub-mirror-action@master
-      with:
-        src: github/shimmerjordan
-        dst: gitee/shimmerjordan
-        dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
-        dst_token:  ${{ secrets.GITEE_TOKEN }}
-        cache_path: /github/workspace/hub-mirror-cache
-        # white_list: 'hub-mirror-action, hexo-migrator-github-issue'
-        force_update: true
+      - name: Cache src repos
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: ${{ github.workspace }}/hub-mirror-cache
+          key: ${{ runner.os }}-hub-repos-cache-${{ steps.get-time.outputs.date }}
+          restore-keys: ${{ runner.os }}-hub-repos-cache
 
-    - name: Print cache path
-      run: |
-        ls -la ${{ github.workspace }}/hub-mirror-cache
+      - name: Mirror GitHub to Gitee
+        uses: ./
+        with:
+          src: github/shimmerjordan
+          dst: gitee/shimmerjordan
+          # 列举源仓库时使用，避免未认证的 GitHub API 速率限制（push 频繁触发时尤为重要）
+          src_token: ${{ secrets.GITHUB_TOKEN }}
+          # Gitee 公钥对应的私钥：https://gitee.com/profile/sshkeys
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          # Gitee 用于创建仓库的 token：https://gitee.com/profile/personal_access_tokens
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          cache_path: /github/workspace/hub-mirror-cache
+          # white_list: 'hub-mirror, hexo-migrator-github-issue'
+          force_update: true
+
+      - name: Print cache path
+        run: ls -la ${{ github.workspace }}/hub-mirror-cache

@@ -13,6 +13,7 @@ chmod 600 /root/.ssh/id_rsa
 DST_TOKEN="${INPUT_DST_TOKEN}"
 
 SRC_HUB="${INPUT_SRC}"
+SRC_TOKEN="${INPUT_SRC_TOKEN}"
 DST_HUB="${INPUT_DST}"
 
 ACCOUNT_TYPE="${INPUT_ACCOUNT_TYPE}"
@@ -105,10 +106,27 @@ function get_all_repo_names
   PAGE_NUM=100
   URL=$1
   HUB_TYPE=$2
+  AUTH_TOKEN=$3
+
+  # Build the curl auth args (only when a token is provided).
+  CURL_AUTH=()
+  if [[ -n "$AUTH_TOKEN" ]]; then
+    if [[ "$HUB_TYPE" == "github" ]]; then
+      CURL_AUTH=(-H "Authorization: token $AUTH_TOKEN")
+    elif [[ "$HUB_TYPE" == "gitee" ]]; then
+      # Gitee takes the token as a query parameter instead of a header.
+      URL="$URL?access_token=$AUTH_TOKEN&"
+    fi
+  fi
+  # Normalise so we can always append `page=...&per_page=...`.
+  if [[ "$URL" != *\? ]] && [[ "$URL" != *\& ]]; then
+    URL="$URL?"
+  fi
+
   if [[ "$HUB_TYPE" == "github" ]]; then
-    total=`curl -sI "$URL?page=1&per_page=$PAGE_NUM" | sed -nr "s/^[lL]ink:.*page=([0-9]+)&per_page=$PAGE_NUM.*/\1/p"`
+    total=`curl "${CURL_AUTH[@]}" -sI "${URL}page=1&per_page=$PAGE_NUM" | sed -nr "s/^[lL]ink:.*page=([0-9]+)&per_page=$PAGE_NUM.*/\1/p"`
   elif [[ "$HUB_TYPE" == "gitee" ]]; then
-    total=`curl -sI "$URL?page=1&per_page=$PAGE_NUM" | grep total_page: |cut -d ' ' -f2 |tr -d '\r'`
+    total=`curl "${CURL_AUTH[@]}" -sI "${URL}page=1&per_page=$PAGE_NUM" | grep total_page: |cut -d ' ' -f2 |tr -d '\r'`
   fi
 
   # use pagination?
@@ -119,14 +137,14 @@ function get_all_repo_names
 
   p=1
   while [ "$p" -le "$total" ]; do
-    x=`curl -s "$URL?page=$p&per_page=$PAGE_NUM" | jq -r '.[] | .name'`
+    x=`curl "${CURL_AUTH[@]}" -s "${URL}page=$p&per_page=$PAGE_NUM" | jq -r '.[] | .name'`
     echo $x
     p=$(($p + 1))
   done
 }
 
 if [[ -z $STATIC_LIST ]]; then
-  SRC_REPOS=`get_all_repo_names $SRC_REPO_LIST_API $SRC_TYPE`
+  SRC_REPOS=`get_all_repo_names $SRC_REPO_LIST_API $SRC_TYPE $SRC_TOKEN`
 else
   SRC_REPOS=`echo $STATIC_LIST | tr ',' ' '`
 fi
@@ -141,7 +159,7 @@ else
   err_exit "Unknown dst args, the `dst` should be `[github|gittee]/account`"
 fi
 
-DST_REPOS=`get_all_repo_names $DST_REPO_LIST_API $DST_TYPE`
+DST_REPOS=`get_all_repo_names $DST_REPO_LIST_API $DST_TYPE $DST_TOKEN`
 
 function clone_repo
 {
