@@ -18,7 +18,7 @@ inputs:
     description: "Source name. Such as `github/shimmerjordan`."
     required: true
   src_token:
-    description: "Optional API token for the source hub, used only to list repos. Avoids the unauthenticated GitHub API rate limit (60/h) on frequent runs. Pass `${{ secrets.GITHUB_TOKEN }}` for GitHub sources."
+    description: "Optional API token for the source hub, used only to list repos. Avoids the unauthenticated GitHub API rate limit (60/h) on frequent runs. Pass the workflow's GITHUB_TOKEN secret for GitHub sources."
     default: ''
   account_type:
     description: "The account type. Such as org, user."
