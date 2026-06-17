@@ -10,6 +10,12 @@ mkdir -p /root/.ssh
 echo "${INPUT_DST_KEY}" > /root/.ssh/id_rsa
 chmod 600 /root/.ssh/id_rsa
 
+# The cached repos under $CACHE_PATH are restored by actions/cache and may be
+# owned by a different UID than the container's root user. Modern Git then
+# refuses to operate on them ("detected dubious ownership", CVE-2022-24765).
+# Trust every directory since this container is single-purpose and ephemeral.
+git config --global --add safe.directory '*'
+
 DST_TOKEN="${INPUT_DST_TOKEN}"
 
 SRC_HUB="${INPUT_SRC}"
