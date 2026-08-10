@@ -188,13 +188,31 @@ function create_repo
       curl -s -X POST --header 'Content-Type: application/json;charset=UTF-8' $DST_REPO_CREATE_API -d '{"name": "'$1'","access_token": "'$2'"}' > /dev/null
     fi
   fi
-  git remote add $DST_TYPE git@$DST_TYPE.com:$DST_ACCOUNT/$1.git || echo "Remote already exists."
+  # Cached repos already carry the destination remote from a previous run. Setting the
+  # URL instead of blindly re-adding it keeps the log clean and picks up account renames.
+  DST_REMOTE_URL=git@$DST_TYPE.com:$DST_ACCOUNT/$1.git
+  if git remote get-url $DST_TYPE > /dev/null 2>&1; then
+    git remote set-url $DST_TYPE $DST_REMOTE_URL
+  else
+    git remote add $DST_TYPE $DST_REMOTE_URL
+  fi
 }
 
 function update_repo
 {
   echo -e "\033[31m(1/3)\033[0m" "Updating..."
-  retry git pull -p
+  # Only the remote-tracking refs matter: import_repo pushes refs/remotes/origin/*,
+  # so there is no need to merge anything into the working tree. Unlike `git pull`,
+  # `git fetch` does not depend on the current branch, so it also succeeds against
+  # an upstream repo that has no commits at all.
+  retry git fetch -p --tags origin || return 1
+
+  # A brand new repo on the source hub has no refs yet. There is nothing to mirror,
+  # and pushing a wildcard refspec that matches nothing would fail, so skip it.
+  if [[ -z "$(git for-each-ref refs/remotes/origin --format='%(refname)')" ]]; then
+    echo "Empty upstream repo, nothing to mirror."
+    return 2
+  fi
 }
 
 function import_repo
@@ -255,7 +273,15 @@ for repo in $SRC_REPOS
 
     create_repo $repo $DST_TOKEN || delay_exit "create failed" $repo || continue
 
-    update_repo || delay_exit "Update failed" $repo || continue
+    update_repo; update_status=$?
+    if [[ $update_status -eq 2 ]]; then
+      # Empty upstream repo: not an error, just nothing to do.
+      skip=$(($skip + 1))
+      continue
+    elif [[ $update_status -ne 0 ]]; then
+      delay_exit "Update failed" $repo
+      continue
+    fi
 
     import_repo && success=$(($success + 1)) || delay_exit "Push failed" $repo || continue
   else
