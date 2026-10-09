@@ -205,7 +205,9 @@ function update_repo
   # so there is no need to merge anything into the working tree. Unlike `git pull`,
   # `git fetch` does not depend on the current branch, so it also succeeds against
   # an upstream repo that has no commits at all.
-  retry git fetch -p --tags origin || return 1
+  # `--force` lets a tag that was moved upstream overwrite the stale copy in the
+  # cache; without it git rejects the fetch ("would clobber existing tag").
+  retry git fetch -p --tags --force origin || return 1
 
   # A brand new repo on the source hub has no refs yet. There is nothing to mirror,
   # and pushing a wildcard refspec that matches nothing would fail, so skip it.
